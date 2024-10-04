@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barcode Scanner</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <title>Barcode Scanner</title>
+    <style>
+        #video {
+            width: 100%;
+            max-width: 600px;
+            max-height: 200px;
+            margin: auto;
+            display: block;
+            border: 2px solid #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #manualBarcode {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button{
+            padding: 5px 10px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border: none;
+            background-color: mediumblue;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        #submit{
+            padding: 7px 30px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border: none;
+            background-color: mediumblue;
+            border-radius: 5px;
+            
+        }
+        input[type='text']{
+        font-size: 15px;
+        color: black;
+        line-height: 30px;
+        width: 98%;
+        height: 100%;
+        margin-bottom: 5px;
+        margin-top: 20px;
+        }
+
+    hr {
+            position: absolute;
+            top: 160px; /* Sesuaikan dengan posisi yang diinginkan */
+            width: 100%;
+            right: 0;
+            z-index: 10; /* Pastikan <hr> berada di atas elemen lain */
+            border: 0;
+            border-top: 2px solid red;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Barcode Scanner Unit</h1>
+    <form method="post" action="https://script.google.com/macros/s/AKfycbxbQQBbxGcFocqHVC6OanZL30XvNN5eZuozfDvWrG0GusPi4r6R_nGdYjH8uovCiV2VUA/exec" name="contact-form">
+    <hr style="width:50%; margin-left:25% !important; margin-right:25% !important;" />
+    
+    <!-- Video element untuk menampilkan output dari kamera -->
+    <video id="video" style="width: 100%; max-width: 640px;"></video>
+    
+    <!-- Input manual untuk memasukkan barcode -->
+    <input type="text" name="manualBarcode" id="manualBarcode" placeholder="Enter barcode manually">
+    <!--<button onclick="handleManualInput()">Submit Manual</button> rumus dimatikan-->
+    
+    <!-- Container untuk hasil pemindaian barcode -->
+    <div id="result"></div>
+    
+    <!-- Tombol untuk memulai pemindaian -->
+    <button onclick="startScan()">Start Scan</button>
+
+    <script>
+    const video = document.getElementById('video');
+    const resultContainer = document.getElementById('result');
+    const manualBarcodeInput = document.getElementById('manualBarcode');
+
+    // Mengakses kamera pengguna
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(stream) {
+            video.srcObject = stream;
+            video.onloadedmetadata = function(e) {
+                video.play();
+            };
+        })
+        .catch(function(err) {
+            console.log('Gagal mengakses kamera: ' + err);
+        });
+
+    // Membuat pembaca barcode menggunakan ZXing
+    const codeReader = new ZXing.BrowserBarcodeReader();
+
+    // Fungsi untuk memulai pemindaian barcode
+    function startScan() {
+        codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
+            if (result) {
+                console.log(result);
+                resultContainer.textContent = result.text;
+                manualBarcodeInput.value = result.text; // Set nilai hasil ke input manual
+            }
+            if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error(err);
+                resultContainer.textContent = 'Gagal memindai barcode. Silakan coba lagi.';
+            }
+        });
+    }
+
+    // Fungsi untuk menangani input manual
+    function handleManualInput() {
+        const barcodeValue = manualBarcodeInput.value.trim();
+        if (barcodeValue !== '') {
+            alert('Data barcode siap untuk dikirim: ' + barcodeValue);
+            // Kirim data ke server atau lakukan operasi lain di sini
+        } else {
+            alert('Masukkan atau scan barcode terlebih dahulu.');
+        }
+    }
+</script>
+    
+    <input type="text" name="kilometer" placeholder="Kilometer" required>
+
+    <h4><label for="lokasi">Lokasi</label></h4>
+    <select id="lokasi" name="lokasi">
+    <option value="Gudang Stockyard Palembang">Gudang Stockyard Palembang</option>
+    <option value="Palembang Plaju">Palembang Plaju</option>    
+    <option value="Palembang Veteran">Palembang Veteran</option>
+    <option value="Prabumulih">Prabumulih</option>
+    <option value="DSP-Muara Enim">DSP-Muara Enim</option>
+    <option value="DSP-Lahat">DSP-Lahat</option>
+    <option value="DSP Banyuasin Betung">DSP Banyuasin Betung</option>
+    <option value="DSP Kayu Agung">DSP Kayu Agung</option>
+    <option value="DSP Talang Kelapa">DSP Talang Kelapa</option>
+    <option value="Prabumulih">EXH-JAKABARING</option>
+    <option value="EXP-OPI MALL">EXP-OPI MALL</option>
+    </select>
+
+    <p><u>Barcode Rusak?</p></u>
+    <input type="checkbox" name="barcode rusak" value="Ya">
+    <label for="task1">Ya</label><br>
+    <input type="checkbox" name="barcode rusak" value="Tidak">
+    <label for="task2">Tidak</label><br>
+    
+    <p><u>Accu</p></u>
+    <input type="checkbox" name="accu" value="Ada">
+    <label for="task1">Ada</label><br>
+    <input type="checkbox" name="accu" value="Tidak ada">
+    <label for="task2">Tidak ada</label><br>
+
+    <p><u>Kondisi Accu</p></u>
+    <input type="checkbox" name="kondisi accu" value="Normal">
+    <label for="task3">Normal</label><br>
+    <input type="checkbox" name="kondisi accu" value="Tidak normal">
+    <label for="task4">Tidak Normal</label><br>
+
+    <p><u>Tool Set</p></u>
+    <input type="checkbox" name="tool set" value="Ada">
+    <label for="task3">Ada</label><br>
+    <input type="checkbox" name="tool set" value="Tidak Tidak ada">
+    <label for="task4">Tidak ada</label><br>
+
+    <p><u>Kondisi Tool Set</p></u>
+    <input type="checkbox" name="kondisi tool set" value="Baru">
+    <label for="task3">Baru</label><br>
+    <input type="checkbox" name="kondisi tool set" value="Tidak Baru">
+    <label for="task4">Tidak Baru</label><br>
+
+    <p><u>Ban Serep</p></u>
+    <input type="checkbox" name="ban serep" value="Ada">
+    <label for="task1">Ada</label><br>
+    <input type="checkbox" name="ban serep" value="Tidak ada">
+    <label for="task2">Tidak ada</label><br>
+
+    <p><u>Kondisi Ban Serep</p></u>
+    <input type="checkbox" name="kondisi ban serep" value="Normal">
+    <label for="task3">Normal</label><br>
+    <input type="checkbox" name="kondisi ban serep" value="Tidak normal">
+    <label for="task4">Tidak Normal</label><br>
+
+        <input type="submit" value="Submit" id="submit">
+    
+</form>
+    </div>
+
+    <script src="sheet2.js"></script>
+</body>
+</html>

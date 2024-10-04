@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Attendance</title>
+	<link rel="stylesheet" href="Google Sheet.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style>
+		a {
+		border: 1px solid #007bff;
+		background: #007bff;
+		margin: 10px 20px;
+    	padding: 5px 10px;
+    	width: 350px;
+		padding: 30px;
+		border-radius: 10px;
+		background-color: transparent;
+
+		
+		color: white;
+		text-decoration: none;
+		border-radius: 6px;
+		}
+
+		a:hover {
+			background: white;
+			color: #007bff;
+		}
+
+	</style>
+	
+
+	<script>
+function updateInputTime() {
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    
+    // Pad single digit minutes and seconds with leading zeros
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    
+    var timeString = hours + ':' + minutes + ':' + seconds;
+    
+    document.getElementById('clock in').value = timeString;
+}
+
+// Update input time every second
+setInterval(updateInputTime, 1000);
+</script>
+
+<style>
+        body {
+            background-image: url('https://besthqwallpapers.com/Uploads/10-6-2022/198949/thumb2-daihatsu-carbon-logo-4k-grunge-art-carbon-background-creative.jpg'); /* Ganti URL dengan URL gambar latar belakang online Anda */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+        }
+        .content {
+            text-align: center;
+            padding: 50px;
+            color: white;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+
+
+	<h1></h1>
+	<p type="text" id="clock in" name="clock">
+	<p><a href="index1.html">Clock In</a></p>
+	<p><a href="index2.html">Clock Out</a></p>
+
+</body>
+</html>
